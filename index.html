@@ -1,4 +1,4 @@
-# 高精度立体操作式三次元計算端末 // 狂瀾豪華・虹彩電脳光沢極大改造版
+# 高精度立体操作式三次元計算端末 // 極致写実・深緑液晶・高級光沢最適化版（案内文字撤廃）
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -17,7 +17,7 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #040508;
+            background-color: #080a10;
             font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
 
             color: #e2e8f0;
@@ -37,29 +37,10 @@
         #canvas-section {
             width: 100%;
             height: 100%;
-            background-color: #020305;
+            background-color: #04060a;
             position: relative;
 
         }
-
-        /* 画面左上の案内テキスト */
-        #guide-text {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            font-size: 11px;
-            color: #8b949e;
-            letter-spacing: 1px;
-            pointer-events: none;
-            z-index: 5;
-            line-height: 1.6;
-            background: rgba(4, 5, 8, 0.95);
-            padding: 14px 18px;
-            border-radius: 10px;
-            border: 1px solid #ff007f; /* 派手なネオンピンクの枠線 */
-            box-shadow: 0 0 20px rgba(255, 0, 127, 0.3);
-        }
-
     </style>
     <!-- 三次元描画のための外部部品読み込み（許可されたCDN） -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -69,17 +50,7 @@
     <div id="interface-container">
         
         <!-- 3D表示領域 -->
-        <div id="canvas-section">
-            <div id="guide-text">
-                【狂瀾豪華・虹彩電脳光沢極大改造版 操作案内】<br>
-                ・立体ボタンを直接叩く（クリック／タップ）<br>
-                ・実機を回す：外側を引く（ドラッグ／スワイプ）<br>
-                ※文字の歪み補正済 ／ 200ミリ秒連続打鍵ロック稼働中<br>
-                【新設の便利機能】開平：ルート / 逆数：1/x / 円周率：π / 階乗：n!<br>
-                【もっともっと派手な演出】動的虹彩オーロラ発光液晶 ＆ 超ダイナミック打鍵ストローク内包
-            </div>
-        </div>
-
+        <div id="canvas-section"></div>
 
     </div>
 
@@ -88,18 +59,15 @@
         let 内部入力値 = "0";
         let 内部数式文字列 = "";
         let 内部計算完了フラグ = false;
+
         let 内部補助画面文字列 = ""; 
 
         let lastInputTime = 0;
         const INPUT_LOCK_INTERVAL = 200; // 0.2秒ロック
 
-        // 派手な演出用：現在の虹彩色彩フェーズを管理する変数
-        let 色彩色彩変量 = 0;
-
         function toHalfWidthNum(str) {
             return str.replace(/[０-９]/g, s => String.fromCharCode(s.charCodeAt(0) - 0xFEE0)).replace(/．/g, '.');
         }
-
 
         function toFullWidthNum(str) {
             return String(str).replace(/[0-9.]/g, s => s === '.' ? '．' : String.fromCharCode(s.charCodeAt(0) + 0xFEE0));
@@ -111,6 +79,7 @@
             let 積 = 1;
             for (let i = 2; i <= n; i++) {
                 積 *= i;
+
                 if (積 === Infinity) return Infinity;
             }
             return 積;
@@ -121,9 +90,6 @@
             if (currentTime - lastInputTime < INPUT_LOCK_INTERVAL) return;
             lastInputTime = currentTime;
 
-
-            // ボタンが押されるたびに色彩変量を大きくジャンプさせ、液晶の色を劇的に変化させる
-            色彩色彩変量 += 65;
             triggerButtonAnimation(key);
 
             if (key === '消去') {
@@ -133,6 +99,7 @@
                 内部計算完了フラグ = false;
             } else if (key === '払') {
                 内部入力値 = "0";
+
             } else if (key === '弾') {
                 if (内部計算完了フラグ) {
                     内部数式文字列 = "";
@@ -141,7 +108,6 @@
                 } else if (内部入力値 !== "0" && 内部入力値 !== "計算誤り") {
                     内部入力値 = 内部入力値.slice(0, -1);
                     if (内部入力値 === "" || 内部入力値 === "ー") 内部入力値 = "0";
-
                 }
             } else if (key === '正負') {
                 if (内部入力値 !== "0" && 内部入力値 !== "計算誤り") {
@@ -153,6 +119,7 @@
                         let num = parseFloat(toHalfWidthNum(内部入力値));
                         内部入力値 = toFullWidthWidthClean(num * num);
                         内部計算完了フラグ = true;
+
                     } catch(e) { 内部入力値 = "計算誤り"; }
                 }
             } else if (key === '％') {
@@ -161,7 +128,6 @@
                         let num = parseFloat(toHalfWidthNum(内部入力値));
                         内部入力値 = toFullWidthWidthClean(num / 100);
                     } catch(e) { 内部入力値 = "計算誤り"; }
-
                 }
             } else if (key === '開平') {
                 if (内部入力値 !== "計算誤り") {
@@ -173,6 +139,7 @@
                             内部入力値 = toFullWidthWidthClean(Math.sqrt(num));
                             内部計算完了フラグ = true;
                         }
+
                     } catch(e) { 内部入力値 = "計算誤り"; }
                 }
             } else if (key === '逆数') {
@@ -181,7 +148,6 @@
                         let num = parseFloat(toHalfWidthNum(内部入力値));
                         if (num === 0) {
                             内部入力値 = "計算誤り";
-
                         } else {
                             内部入力値 = toFullWidthWidthClean(1 / num);
                             内部計算完了フラグ = true;
@@ -193,6 +159,7 @@
                 if (内部計算完了フラグ) 内部計算完了フラグ = false;
             } else if (key === '階乗') {
                 if (内部入力値 !== "計算誤り") {
+
                     try {
                         let num = parseFloat(toHalfWidthNum(内部入力値));
                         if (num % 1 !== 0 || num < 0 || num > 170) {
@@ -201,7 +168,6 @@
                             内部入力値 = toFullWidthWidthClean(計算階乗(num));
                             内部計算完了フラグ = true;
                         }
-
                     } catch(e) { 内部入力値 = "計算誤り"; }
                 }
             } else if (key === '＝') {
@@ -213,15 +179,14 @@
 
                     let result = Function('return ' + calcFormula)();
                     内部補助画面文字列 = 内部数式文字列 + 内部入力値 + " ＝";
+
                     内部入力値 = toFullWidthWidthClean(result);
                     内部数式文字列 = "";
                     内部計算完了フラグ = true;
-                    色彩色彩変量 += 120; // イコール時はさらにド派手に色彩をジャンプ
                 } catch (e) {
                     内部入力値 = "計算誤り";
                 }
             } else if (['＋', 'ー', '×', '÷'].includes(key)) {
-
                 if (内部計算完了フラグ) {
                     内部数式文字列 = 内部入力値 + " " + key + " ";
                     内部計算完了フラグ = false;
@@ -234,6 +199,7 @@
                 }
                 内部入力値 = "0";
                 内部補助画面文字列 = 内部数式文字列;
+
             } else {
                 if (内部計算完了フラグ) {
                     内部入力値 = key;
@@ -241,7 +207,6 @@
                 } else {
                     if (内部入力値 === "0" && key !== '．') {
                         内部入力値 = key;
-
                     } else {
                         if (key === '．' && 内部入力値.includes('．')) return;
                         内部入力値 += key;
@@ -254,6 +219,7 @@
         }
 
         function toFullWidthWidthClean(num) {
+
             if (num === Infinity) return "無限大";
             if (isNaN(num)) return "計算誤り";
             let s = String(Number(num.toFixed(10))); 
@@ -261,8 +227,7 @@
         }
 
 
-
-        // --- 2. Three.js による超リアル光沢写実・虹彩波紋演出付き三次元立体電卓描画 ---
+        // --- 2. Three.js による超リアル光沢写実・マルチタッチ対応三次元立体電卓描画 ---
         let container, scene, camera, renderer, calcBoard;
         let buttonMeshMap = {}; 
         let buttonObjects = []; 
@@ -274,14 +239,13 @@
         let hasMovedOrDragged = false; 
         let previousMousePosition = { x: 0, y: 0 };
         let touchStartPos = { x: 0, y: 0 };
+
         let rotationTargetX = -0.38; 
         let rotationTargetY = 0.38;
 
-        // もっともっと派手な演出用：激しい光彩波紋用の超強力ポイントライト
+        // 上品な反射光演出：打鍵時にキーのフチや金属に柔らかく映り込む電球色（ウォームホワイト）のスポットライト
         let tapRippleLight;
         let rippleLightIntensity = 0;
-        let rippleColorIndex = 0;
-
 
         const raycaster = new THREE.Raycaster();
         const mouseVector = new THREE.Vector2();
@@ -291,10 +255,11 @@
             if (!container) return;
 
             scene = new THREE.Scene();
-            scene.background = new THREE.Color('#020305');
+            scene.background = new THREE.Color('#04060a');
 
             camera = new THREE.PerspectiveCamera(40, container.clientWidth / container.clientHeight, 0.1, 1000);
             camera.position.set(0, -0.4, 9.8); 
+
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(container.clientWidth, container.clientHeight);
@@ -302,57 +267,60 @@
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             renderer.toneMapping = THREE.ACESFilmicToneMapping; 
-
-            renderer.toneMappingExposure = 1.2; // 派手さを強調するため露出をアップ
+            renderer.toneMappingExposure = 1.15; // 鏡面ハイライトの反射光沢を引き立たせる露出
             container.appendChild(renderer.domElement);
 
             // 環境光
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.32);
             scene.add(ambientLight);
 
-            // 主光源：超リアルな鏡面ハイライト光沢を強烈に作るシャープライト
-            const mainLight = new THREE.DirectionalLight(0xffffff, 1.3);
-            mainLight.position.set(5, 9, 8);
+            // 主光源：鏡面ハイライト光沢と鋭い金属の照り返しを作るシャープライト
+            const mainLight = new THREE.DirectionalLight(0xffffff, 1.4);
+            mainLight.position.set(6, 10, 8);
             mainLight.castShadow = true;
             mainLight.shadow.mapSize.width = 2048; 
             mainLight.shadow.mapSize.height = 2048;
-            mainLight.shadow.bias = -0.0003;
+
+            mainLight.shadow.bias = -0.0002;
             scene.add(mainLight);
 
-            // 補助光源（サイバー感のある鮮烈なマゼンタ・ピンク光）
-            const sideLight = new THREE.DirectionalLight(0xff00ff, 0.6);
-            sideLight.position.set(-6, -2, 4);
-
+            // 補助光源（リアルな立体反射を生むサイド昼白光）
+            const sideLight = new THREE.DirectionalLight(0xbcc8ff, 0.55);
+            sideLight.position.set(-6, -2, 5);
             scene.add(sideLight);
 
-            // ★ もっともっと派手な演出：打鍵時にボタンから強烈に溢れる超高輝度マルチカラーライト
-            tapRippleLight = new THREE.PointLight(0xff007f, 0, 6);
+            // 打鍵時の光沢変化を引き立てる動的な反射光線用ポイントライト
+            tapRippleLight = new THREE.PointLight(0xfff3e0, 0, 5);
             scene.add(tapRippleLight);
 
             calcBoard = new THREE.Group();
             scene.add(calcBoard);
 
-            // 筐体ベース（クロームチタン調の超光沢プラスチックボディ）
+            // 電卓の大きさをコンパクトに調整したスケール（0.81倍）
+            calcBoard.scale.set(0.81, 0.81, 0.81);
+
+            // 筐体ベース（渋みのある高級マットチタン調プラスチックボディ）
+
             const bodyGeo = new THREE.BoxGeometry(5.2, 7.6, 0.45);
             const bodyMat = new THREE.MeshStandardMaterial({ 
-                color: '#1a1f26', 
-                roughness: 0.22, // 光沢を増して反射を派手に
-                metalness: 0.4
+                color: '#21262d', 
+                roughness: 0.3,
+                metalness: 0.35
             });
             const bodyMesh = new THREE.Mesh(bodyGeo, bodyMat);
             bodyMesh.castShadow = true;
             bodyMesh.receiveShadow = true;
-
             calcBoard.add(bodyMesh);
 
-            // 超リアル金属外枠（鏡面ポリッシュゴールドアルミベゼル）
+            // 超リアル金属外枠（鈍くも強烈な光沢を放つ高級ヘアラインアルミベゼル）
             const bezelGeo = new THREE.BoxGeometry(4.8, 1.2, 0.04);
             const bezelMat = new THREE.MeshStandardMaterial({ 
-                color: '#ffcc00', // 金色のまばゆいメタリック枠
-                roughness: 0.08, 
-                metalness: 0.98 
+                color: '#abb4be', 
+                roughness: 0.14, // 粗さを抑えてハイライト光沢の反射を最大化
+                metalness: 0.95  // アルミ削り出しの質感を再現
             });
             const bezelMesh = new THREE.Mesh(bezelGeo, bezelMat);
+
             bezelMesh.position.set(0, 2.9, 0.23);
             calcBoard.add(bezelMesh);
 
@@ -362,37 +330,37 @@
             displayCanvas.height = 128;
             displayCtx = displayCanvas.getContext('2d');
             displayTexture = new THREE.CanvasTexture(displayCanvas);
-
             update3DDisplayCanvas(); 
 
             const dispGeo = new THREE.BoxGeometry(4.6, 1.0, 0.02);
             displayGlowMaterial = new THREE.MeshStandardMaterial({ 
                 map: displayTexture, 
-                roughness: 0.01, 
-                metalness: 0.1,
-                emissive: new THREE.Color('#ff007f'),
-                emissiveIntensity: 0.4
+                roughness: 0.03, // ディスプレイ表面のガラス反射をリアルに
+                metalness: 0.15,
+                emissive: new THREE.Color('#052e16'), // 深緑のバックライト光
+                emissiveIntensity: 0.32
             });
+
             const dispMesh = new THREE.Mesh(dispGeo, displayGlowMaterial);
             dispMesh.position.set(0, 2.9, 0.25); 
             calcBoard.add(dispMesh);
 
-            // 28ボタンの超本格配置マッピング
+            // 28ボタンの超本格配置マッピング（実機ライクな落ち着いたカラーリング）
             const keysData = [
-                ['消去', -1.72, 2.0, '#d92b2b'], ['払', -0.57, 2.0, '#ff9900'],   ['弾', 0.57, 2.0, '#5c6370'],   ['÷', 1.72, 2.0, '#0088ff'],
-                ['開平', -1.72, 1.4, '#2ebd59'], ['逆数', -0.57, 1.4, '#2ebd59'], ['円周', 0.57, 1.4, '#2ebd59'], ['×', 1.72, 1.4, '#0088ff'],
-                ['乗', -1.72, 0.8, '#2ebd59'],   ['正負', -0.57, 0.8, '#2ebd59'], ['％', 0.57, 0.8, '#2ebd59'],   ['階乗', 1.72, 0.8, '#2ebd59'],
-
-                ['７', -1.72, 0.2, '#282e38'],   ['８', -0.57, 0.2, '#282e38'],   ['９', 0.57, 0.2, '#282e38'],   ['ー', 1.72, 0.2, '#0088ff'],
-                ['４', -1.72, -0.4, '#282e38'],  ['５', -0.57, -0.4, '#282e38'],  ['６', 0.57, -0.4, '#282e38'],  ['＋', 1.72, -0.4, '#0088ff'],
-                ['１', -1.72, -1.0, '#282e38'],  ['２', -0.57, -1.0, '#282e38'],  ['３', 0.57, -1.0, '#282e38'],  ['＝', 1.72, -1.3, '#ff007f'], // イコールをド派手なネオンピンクに
-                ['０', -1.15, -1.6, '#282e38'],                                   ['．', 0.57, -1.6, '#282e38']
+                ['消去', -1.72, 2.0, '#7a1c1c'], ['払', -0.57, 2.0, '#995c00'],   ['弾', 0.57, 2.0, '#30363d'],   ['÷', 1.72, 2.0, '#1c4485'],
+                ['開平', -1.72, 1.4, '#1b5e20'], ['逆数', -0.57, 1.4, '#1b5e20'], ['円周', 0.57, 1.4, '#1b5e20'], ['×', 1.72, 1.4, '#1c4485'],
+                ['乗', -1.72, 0.8, '#1b5e20'],   ['正負', -0.57, 0.8, '#1b5e20'], ['％', 0.57, 0.8, '#1b5e20'],   ['階乗', 1.72, 0.8, '#1c4485'],
+                ['７', -1.72, 0.2, '#21262d'],   ['８', -0.57, 0.2, '#21262d'],   ['９', 0.57, 0.2, '#21262d'],   ['ー', 1.72, 0.2, '#1c4485'],
+                ['４', -1.72, -0.4, '#21262d'],  ['５', -0.57, -0.4, '#21262d'],  ['６', 0.57, -0.4, '#21262d'],  ['＋', 1.72, -0.4, '#1c4485'],
+                ['１', -1.72, -1.0, '#21262d'],  ['２', -0.57, -1.0, '#21262d'],  ['３', 0.57, -1.0, '#21262d'],  ['＝', 1.72, -1.3, '#163b75'], 
+                ['０', -1.15, -1.6, '#21262d'],                                   ['．', 0.57, -1.6, '#21262d']
             ];
 
             // 立体ボタン群の生成
             keysData.forEach(k => {
                 let name = k[0];
                 let bx = k[1];
+
                 let by = k[2];
                 let bcolor = k[3];
 
@@ -401,18 +369,17 @@
                 if (name === '＝') { bh = 1.05; by = -1.3; }
                 if (name === '０') { bw = 2.1; bx = -1.14; }
 
-                // 外観マテリアル：実機のように美しくエッジが反射する超高光沢樹脂
-
                 const btnGeo = new THREE.BoxGeometry(bw, bh, 0.22);
                 const btnMat = new THREE.MeshStandardMaterial({ 
                     color: bcolor, 
-                    roughness: 0.1, // 表面を滑らかにしてハイライト反射を最大化
-                    metalness: 0.55 // メタリック感を大幅にアップしてド派手に
+                    roughness: 0.16, // 光沢反射がしっかり乗る滑らかさに最適化
+                    metalness: 0.4   
                 });
                 const btnMesh = new THREE.Mesh(btnGeo, btnMat);
                 btnMesh.position.set(bx, by, 0.22);
                 btnMesh.castShadow = true;
                 btnMesh.receiveShadow = true;
+
 
                 // 等倍アスペクト比歪み補正ノード
                 const textCanvas = document.createElement('canvas');
@@ -421,8 +388,7 @@
                 textCanvas.height = Math.round(baseRes * (bh / bw));
                 
                 const tCtx = textCanvas.getContext('2d');
-                tCtx.fillStyle = '#ffffff'; 
-
+                tCtx.fillStyle = '#f0f6fc'; 
                 
                 let fontSize = name.length > 2 ? Math.round(textCanvas.height * 0.4) : (name.length > 1 ? Math.round(textCanvas.height * 0.48) : Math.round(textCanvas.height * 0.58));
                 tCtx.font = 'bold ' + fontSize + 'px sans-serif';
@@ -434,6 +400,7 @@
                 
                 const labelGeo = new THREE.PlaneGeometry(bw * 0.88, bh * 0.82);
                 const labelMat = new THREE.MeshBasicMaterial({ 
+
                     map: textTex, 
                     transparent: true, 
                     side: THREE.DoubleSide 
@@ -441,7 +408,6 @@
                 const labelMesh = new THREE.Mesh(labelGeo, labelMat);
                 labelMesh.position.set(0, 0, 0.112); 
                 btnMesh.add(labelMesh);
-
 
                 btnMesh.userData = { originalZ: 0.22, keyName: name, targetZ: 0.22 };
 
@@ -455,115 +421,92 @@
 
             設定操作関連イベント();
 
+
             animateLoop();
         }
 
-        // ★ もっともっと派手な演出：時間経過で虹彩オーロラ色に変化する動的グラデーション液晶表示板
+        // 深緑の静謐な液晶表示板
         function update3DDisplayCanvas() {
             if (!displayCtx) return;
             
-
-            // 色彩変量を基に、液晶背景をサイバーな極彩色オーロラグラデーションにする
-            let 色相度１ = 色彩色彩変量 % 360;
-            let 色相度２ = (色彩色彩変量 + 120) % 360;
-
-            let グラデーション = displayCtx.createLinearGradient(0, 0, 512, 128);
-            グラデーション.addColorStop(0, 'hsl(' + 色相度１ + ', 80%, 12%)');
-            グラデーション.addColorStop(0.5, 'hsl(' + ((色相度１ + 色相度２)/2) + ', 85%, 8%)');
-            グラデーション.addColorStop(1, 'hsl(' + 色相度２ + ', 80%, 15%)');
-
-            displayCtx.fillStyle = グラデーション;
+            // ダークモスグリーン（#0f1f15）の背景
+            displayCtx.fillStyle = '#0f1f15';
             displayCtx.fillRect(0, 0, 512, 128);
 
-            // 液晶の内枠線をド派手なネオンライト風に発光させる
-            displayCtx.strokeStyle = 'hsl(' + 色相度１ + ', 100%, 50%)';
+            // 液晶の内枠線
+            displayCtx.strokeStyle = '#1e3f2b';
             displayCtx.lineWidth = 4;
             displayCtx.strokeRect(3, 3, 506, 122);
 
             // 上段の小文字式
-            displayCtx.fillStyle = '#c9d1d9';
-
+            displayCtx.fillStyle = '#4ade80';
             displayCtx.font = '22px monospace';
+
             displayCtx.textAlign = 'right';
-            displayCtx.shadowColor = 'hsl(' + 色相度１ + ', 100%, 50%)';
-            displayCtx.shadowBlur = 4;
             displayCtx.fillText(内部補助画面文字列, 485, 42);
 
-            // 下段の大文字メイン数値（まばゆい純白ネオン発光）
-            displayCtx.fillStyle = '#ffffff';
+            // 下段の大文字メイン数値（レトロデジタルな鮮緑発光）
+            displayCtx.fillStyle = '#22c55e';
             displayCtx.font = 'bold 48px monospace';
-            displayCtx.shadowColor = 'hsl(' + 色相度２ + ', 100%, 60%)';
-            displayCtx.shadowBlur = 12;
+            displayCtx.shadowColor = '#22c55e';
+            displayCtx.shadowBlur = 4; 
             displayCtx.fillText(内部入力値, 485, 98);
             
-            // 影効果をリセット
             displayCtx.shadowBlur = 0;
 
             if (displayTexture) displayTexture.needsUpdate = true;
         }
 
-
-        // 打鍵時の脳汁（ドパ）超ダイナミック沈み込みおよび光彩波紋フラッシュの点火
+        // 打鍵時の心地よいボタン沈み込みと、光沢を際立たせる上品な反射照明の動的変化
         function triggerButtonAnimation(keyName) {
             const mesh = buttonMeshMap[keyName];
             if (mesh) {
-                // ★ もっともっと派手な演出：これまでの倍以上深く（底まで）一瞬でダイナミックに沈み込むストローク
-                mesh.position.z = -0.04; 
-                mesh.userData.targetZ = -0.04;
+
+                // 快感ストローク：底までしっかり沈み込むソリッドな打鍵挙動
+                mesh.position.z = 0.04; 
+                mesh.userData.targetZ = 0.04;
                 setTimeout(() => { mesh.userData.targetZ = 0.22; }, 80);
 
-                // 波紋ライトを叩かれたボタンの座標へ自動バインド
+                // スポット照明を叩かれたボタンの座標へ自動バインドし、エッジの反射光を一瞬だけ変化させる
                 const worldPos = new THREE.Vector3();
                 mesh.getWorldPosition(worldPos);
                 tapRippleLight.position.copy(worldPos);
-                tapRippleLight.position.z += 0.5; 
+                tapRippleLight.position.z += 0.45; 
                 
-                // 押すたびに七色ランダムに切り替わる強烈なフラッシュ光彩
-                let 派手な色群 = [0xff0055, 0x00ffcc, 0xffff00, 0xff00ff, 0x00ffff, 0xff7700];
-                rippleColorIndex = (rippleColorIndex + 1) % 派手な色群.length;
-                tapRippleLight.color.setHex(派手な色群[rippleColorIndex]);
-
-
-                // 脳汁光彩強度を限界突破マックスチャージ
-                rippleLightIntensity = 8.0;
+                rippleLightIntensity = 4.2; 
                 if (displayGlowMaterial) {
-                    displayGlowMaterial.emissive.setHex(派手な色群[rippleColorIndex]);
-                    displayGlowMaterial.emissiveIntensity = 1.6; // 液晶ディスプレイが目の前で爆発するように光る
+                    displayGlowMaterial.emissiveIntensity = 0.48; 
                 }
             }
         }
 
         // メインフレーム描画更新ループ
+
         function animateLoop() {
             requestAnimationFrame(animateLoop);
 
-            // 放っておいても液晶のオーロラカラーがじわじわと万華鏡のように揺らめき変化する自動駆動
-            色彩色彩変量 += 0.4;
-            update3DDisplayCanvas();
-
             // 視点のスムーズな慣性補間処理
             calcBoard.rotation.x += (rotationTargetX - calcBoard.rotation.x) * 0.12;
-
             calcBoard.rotation.y += (rotationTargetY - calcBoard.rotation.y) * 0.12;
 
-            // ボタン位置のダイナミック弾性復帰計算
+            // ボタン位置の弾性復帰計算
             for (let name in buttonMeshMap) {
                 let mesh = buttonMeshMap[name];
                 if (mesh.position.z < mesh.userData.targetZ) {
-                    mesh.position.z += 0.035; // 素早く跳ね返るバネ感を強化
+                    mesh.position.z += 0.03; 
                     if (mesh.position.z > mesh.userData.targetZ) mesh.position.z = mesh.userData.targetZ;
                 }
             }
 
-            // 脳汁光彩波紋の滑らかな減衰物理シミュレーション
+            // 反射用スポット照明の滑らかな物理減衰
             if (rippleLightIntensity > 0) {
-                rippleLightIntensity -= 0.35; // 鋭く引くキレのある光の引き際
+                rippleLightIntensity -= 0.28; 
+
                 if (rippleLightIntensity < 0) rippleLightIntensity = 0;
                 tapRippleLight.intensity = rippleLightIntensity;
                 
-                if (displayGlowMaterial && displayGlowMaterial.emissiveIntensity > 0.4) {
-                    displayGlowMaterial.emissiveIntensity -= 0.06;
-
+                if (displayGlowMaterial && displayGlowMaterial.emissiveIntensity > 0.32) {
+                    displayGlowMaterial.emissiveIntensity -= 0.04;
                 }
             }
 
@@ -578,12 +521,12 @@
             mouseVector.y = -((screenY - rect.top) / rect.height) * 2 + 1;
 
             raycaster.setFromCamera(mouseVector, camera);
+
             const intersects = raycaster.intersectObjects(buttonObjects);
 
             if (intersects.length > 0) {
                 const hitMesh = intersects[0].object;
                 if (hitMesh.userData && hitMesh.userData.keyName) {
-
                     pressKey(hitMesh.userData.keyName);
                     return true; 
                 }
@@ -598,12 +541,12 @@
                 hasMovedOrDragged = false;
                 previousMousePosition = { x: screenX, y: screenY };
                 touchStartPos = { x: screenX, y: screenY };
+
             };
 
             const moveAction = (screenX, screenY) => {
                 if (!isMovingCamera) return;
                 let deltaX = screenX - previousMousePosition.x;
-
                 let deltaY = screenY - previousMousePosition.y;
 
                 let totalDist = Math.hypot(screenX - touchStartPos.x, screenY - touchStartPos.y);
@@ -618,12 +561,12 @@
                 previousMousePosition = { x: screenX, y: screenY };
             };
 
+
             const stopAction = (e, screenX, screenY) => {
                 if (!isMovingCamera) return;
                 isMovingCamera = false;
                 if (!hasMovedOrDragged) check3DButtonHit(screenX, screenY);
             };
-
 
             container.addEventListener('mousedown', (e) => startAction(e.clientX, e.clientY));
             window.addEventListener('mousemove', (e) => moveAction(e.clientX, e.clientY));
@@ -638,13 +581,13 @@
             }, { passive: false });
 
             container.addEventListener('touchend', (e) => {
+
                 if (e.changedTouches.length === 1) stopAction(e, e.changedTouches[0].clientX, e.changedTouches[0].clientY);
             });
         }
 
         window.addEventListener('resize', () => {
             if (!camera || !renderer || !container) return;
-
             camera.aspect = container.clientWidth / container.clientHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(container.clientWidth, container.clientHeight);
